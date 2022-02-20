@@ -24,7 +24,7 @@ steps:
     echo "SLSA_SONAR_TOKEN: $$SLSA_SONAR_TOKEN"
     npm install -g sonarqube-scanner
     sonar-scanner \
-    -Dsonar.projectKey=cloudbuild \
+    -Dsonar.projectKey=slsa-demo \
     -Dsonar.host.url=https://${_SONARQUBE_SERVER} \
     -Dsonar.login=$$SLSA_SONAR_TOKEN \
     -Dsonar.qualitygate.wait=true 
