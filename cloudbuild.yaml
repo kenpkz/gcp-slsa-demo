@@ -15,6 +15,8 @@ steps:
     snyk monitor
   secretEnv:
     - SLSA_SNYK_TOKEN
+
+
 - id: sonarqube-scan
   name: "node"
   entrypoint: sh
@@ -31,6 +33,8 @@ steps:
     -Dsonar.qualitygate.wait=true 
   secretEnv: 
     - SLSA_SONAR_TOKEN
+
+
 - id: build-container
   name: gcr.io/cloud-builders/gcloud
   entrypoint: sh
@@ -41,20 +45,9 @@ steps:
     gcloud builds submit --timeout=3000s --tag=${_IMAGE_PATH}:${SHORT_SHA} .
     ImageDigest=$(gcloud container images list-tags --format='get(digest)' ${_IMAGE_PATH} | head -1)
     echo "${_IMAGE_PATH}@${ImageDigest}" > image-digest.txt
-- id: vulsign
-  name: gcr.io/slsa-demo/kritis-signer
-  entrypoint: /bin/bash
-  args:
-  - '-c'
-  - |
-    /kritis/signer -v=10 -alsologtostderr \
-    -image=$(/bin/cat image-digest.txt) \
-    -policy=policy.yaml \
-    -kms_key_name=${_KMS_IMAGEKEY_NAME} \
-    -kms_digest_alg=${_KMS_DIGEST} \
-    -note_name=${_NOTE_NAME}
-  waitFor: ['build-container']
-- id: 'Create Attestation After All Checked Are Passed'
+
+
+- id: 'Create Attestation For the Cloud Build'
   name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: sh
   args:
@@ -75,7 +68,8 @@ steps:
       --keyversion-key="${_KMS_KEY_NAME}" \
       --keyversion="${_KMS_KEY_VERSION}"
     echo "Sign-And-Create to Image: ${ImageToAttest}"
-  waitFor: [vulsign]
+  waitFor: [build-container]
+
 - id: 'Change Deployment Image Tag Name & Trigger cloud deploy'
   name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: sh
