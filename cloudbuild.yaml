@@ -85,7 +85,7 @@ steps:
 
 substitutions:
 # Replace the IMAGE_PATH to your own GCR path
-  _IMAGE_PATH: asia-east2-docker.pkg.dev/slsa-demo/slsa-demo/sample-node
+  _IMAGE_PATH: asia-east2-docker.pkg.dev/slsa-demo/sample-node
   _ATTESTOR_NAME: slsa-attestor
   _KMS_KEY_LOCATION: global
   _KMS_KEYRING_NAME: slsa-ga-keyring
