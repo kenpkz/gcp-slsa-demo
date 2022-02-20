@@ -1,0 +1,15 @@
+steps:
+- id: 'Change Deployment Image Tag Name & Trigger cloud deploy'
+  name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: sh
+  args: 
+  - '-c'
+  - |
+    ImageDigest="$(gcloud container images list-tags --format='get(digest)' ${_IMAGE_PATH} | head -1)"
+    echo "Image Digest: ${ImageDigest}"
+    sed -i "s/replace/${ImageDigest}/g" k8s-manifests/overlays/uat/kustomization.yaml
+    sed -i "s/replace/${ImageDigest}/g" k8s-manifests/overlays/production/kustomization.yaml
+    gcloud beta deploy releases create rev-${SHORT_SHA} --delivery-pipeline=sample-node-demo-1 --labels=version=${SHORT_SHA} --region ${_KMS_KEY_LOCATION}
+substitutions:
+  _IMAGE_PATH: asia-east1-docker.pkg.dev/slsa-demo/slsa-demo/sample-node
+  _KMS_KEY_LOCATION: asia-east1

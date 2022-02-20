@@ -1,0 +1,11 @@
+nameSuffix: "-production"
+namespace: production
+commonLabels:
+  app: juiceshop-production
+bases:
+- ../../base
+patches:
+- service-type.yaml
+images:
+- name: asia-east1-docker.pkg.dev/slsa-demo/slsa-demo/juiceshop
+  digest: replace

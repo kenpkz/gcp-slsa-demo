@@ -1,0 +1,14 @@
+admissionWhitelistPatterns:
+- namePattern: gcr.io/slsa-demo/*
+clusterAdmissionRules:
+  asia-east1-a.slsa:
+    enforcementMode: ENFORCED_BLOCK_AND_AUDIT_LOG
+    evaluationMode: ALWAYS_ALLOW
+  asia-east1.slsa-no-asm:
+    enforcementMode: ENFORCED_BLOCK_AND_AUDIT_LOG
+    evaluationMode: ALWAYS_ALLOW
+defaultAdmissionRule:
+  enforcementMode: ENFORCED_BLOCK_AND_AUDIT_LOG
+  evaluationMode: ALWAYS_DENY
+globalPolicyEvaluationMode: ENABLE
+name: projects/slsa-demo/policy

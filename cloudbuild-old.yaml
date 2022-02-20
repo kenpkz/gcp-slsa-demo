@@ -1,0 +1,45 @@
+steps:
+  - id: 'Run snyk software dependency scan'
+    name: 'ubuntu:latest'
+    entrypoint: sh
+    args:
+      - '-c'
+      - | 
+          cd owasp-sample
+          apt-get update -y
+          apt-get install nodejs -y
+          apt-get install npm -y
+          apt-get install maven -y
+          npm install -g snyk
+          npm install
+          snyk auth ${_SNYK_TOKEN}
+          snyk monitor
+  - id: 'SonarQube Static Code Analysis Scan'
+    name: "node"
+    entrypoint: sh
+    args: 
+    - '-c' 
+    - |  
+      npm install -g sonarqube-scanner
+      sonar-scanner \
+      -Dsonar.projectKey=slsa-node \
+      -Dsonar.host.url=https://sonar.kendemo.app \
+      -Dsonar.login=${_SONAR_TOKEN} \
+      -Dsonar.qualitygate.wait=true
+
+  - id: 'Build Container & Push'
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: sh
+    args: 
+    - '-c' 
+    - | 
+      gcloud builds submit --timeout=1200s --tag=gcr.io/slsa-demo/slsa-juiceshop .
+      
+  - id: 'Trigger the next container deployment Cloud Build'
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: sh
+    args: 
+      - '-c'
+      - | 
+          gcloud pubsub topics publish projects/slsa-demo/topics/deploy-approval-cloud-build --message="ready"
+  

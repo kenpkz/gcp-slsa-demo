@@ -1,0 +1,11 @@
+nameSuffix: "-uat"
+namespace: uat
+commonLabels:
+  app: juiceshop-uat
+bases:
+- ../../base
+patches:
+- service-type.yaml
+images:
+- name: asia-east1-docker.pkg.dev/slsa-demo/slsa-demo/juiceshop
+  digest: replace

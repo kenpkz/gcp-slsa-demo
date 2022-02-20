@@ -1,0 +1,11 @@
+nameSuffix: "-test"
+namespace: test
+commonLabels:
+  app: juiceshop-test
+bases:
+- ../../base
+patches:
+- service-type.yaml
+images:
+- name: asia-east1-docker.pkg.dev/slsa-demo/slsa-demo/juiceshop
+  newTag: latest

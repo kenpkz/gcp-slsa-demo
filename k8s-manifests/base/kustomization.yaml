@@ -1,0 +1,4 @@
+resources:
+- juiceshop.yaml
+- juiceshop-svc.yaml
+- namespace.yaml
