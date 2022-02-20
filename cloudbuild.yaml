@@ -25,6 +25,7 @@ steps:
     npm install -g sonarqube-scanner
     sonar-scanner \
     -Dsonar.projectKey=slsa-demo \
+    -Dsonar.sources=. \
     -Dsonar.host.url=https://${_SONARQUBE_SERVER} \
     -Dsonar.login=$$SLSA_SONAR_TOKEN \
     -Dsonar.qualitygate.wait=true 
@@ -40,7 +41,7 @@ steps:
     gcloud builds submit --timeout=3000s --tag=${_IMAGE_PATH}:${SHORT_SHA} .
     ImageDigest=$(gcloud container images list-tags --format='get(digest)' ${_IMAGE_PATH} | head -1)
     echo "${_IMAGE_PATH}@${ImageDigest}" > image-digest.txt
-- id: container-scan-kritis-sign
+- id: vulsign
   name: gcr.io/slsa-demo/kritis-signer
   entrypoint: /bin/bash
   args:
@@ -74,7 +75,7 @@ steps:
       --keyversion-key="${_KMS_KEY_NAME}" \
       --keyversion="${_KMS_KEY_VERSION}"
     echo "Sign-And-Create to Image: ${ImageToAttest}"
-  waitFor: [container-scan-kritis-sign]
+  waitFor: [vulsign]
 - id: 'Change Deployment Image Tag Name & Trigger cloud deploy'
   name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: sh
@@ -91,7 +92,7 @@ substitutions:
   _KMS_KEYRING_NAME: slsa-ga-keyring
   _KMS_DIGEST: SHA256
   _KMS_KEY_NAME: slsa-ga-key
-  _KMS_IMAGEKEY_NAME: "projects/${PROJECT_ID}/locations/${_KMS_KEY_LOCATION}/keyRings/${_KMS_KEYRING_NAME}/cryptoKeys/slsa-image-key/cryptoKeyVersions/1"
+  _KMS_IMAGEKEY_NAME: "projects/$PROJECT_ID/locations/global/keyRings/kritis-signer-key-ring/cryptoKeys/kritis-signer-key/cryptoKeyVersions/1"
   _KMS_KEY_VERSION: "1"
   _RELEASE_PIPELINE: slsa-demo-ga-release 
   # Replace with your SonarQube server URL
