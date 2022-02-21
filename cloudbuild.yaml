@@ -46,21 +46,6 @@ steps:
     ImageDigest=$(gcloud container images list-tags --format='get(digest)' ${_IMAGE_PATH} | head -1)
     echo "${_IMAGE_PATH}@${ImageDigest}" > image-digest.txt
 
-- id: vulnsign  
-  name: gcr.io/slsa-demo/kritis-signer
-  entrypoint: /bin/bash
-  args:
-  - '-c'
-  - |
-    /kritis/signer -v=10 -alsologtostderr \
-    -image=$(/bin/cat image-digest.txt) \
-    -policy=policy.yaml \
-    -kms_key_name=${_KMS_IMAGEKEY_NAME} \
-    -kms_digest_alg=${_KMS_DIGEST} \
-    -note_name=${_NOTE_NAME}
-  waitFor: ['build-container']
-
-
 - id: 'Create Attestation For the Cloud Build'
   name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: sh
@@ -81,13 +66,8 @@ steps:
       --keyversion-keyring="${_KMS_KEYRING_NAME}" \
       --keyversion-key="${_KMS_KEY_NAME}" \
       --keyversion="${_KMS_KEY_VERSION}"
-    
-    gcloud container binauthz attestations list\
-    --project="${PROJECT_ID}"\
-    --attestor="projects/${PROJECT_ID}/attestors/${_ATTESTOR_NAME}"\
-    --artifact-url="${ImageToAttest}"
 
-  waitFor: [vulnsign]
+  waitFor: [build-container]
 
 - id: 'Change Deployment Image Tag Name & Trigger cloud deploy'
   name: 'gcr.io/cloud-builders/gcloud'
