@@ -78,7 +78,7 @@ steps:
     gcloud pubsub topics publish ${_RELEASE_PIPELINE} --message "Release Request for ${SHORT_SHA}"
 
 substitutions:
-# Replace the IMAGE_PATH to your own GCR path
+# Replace the IMAGE_PATH to your own GCR path, KMS key details
   _IMAGE_PATH: gcr.io/slsa-demo/sample-node
   _ATTESTOR_NAME: slsa-attestor
   _KMS_KEY_LOCATION: global
