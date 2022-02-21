@@ -70,7 +70,7 @@ We will use the community version Snyk for this demo.
 
 * Create slsa-no-asm and slsa clusters
 
-    ```
+```
 gcloud container clusters create slsa-no-asm \
     --zone asia-east1 \
     --node-locations asia-east1-a
@@ -89,14 +89,14 @@ gcloud container clusters create slsa\
 
 * SLSA_SNYK_TOKEN with value from [Snyk Auth Token above](#bookmark=id.p0c0phiknoth)
 
-    ```
+```
 printf "YOUR TOKEN" | gcloud secrets create SLSA_SNYK_TOKEN --data-file=-
 ```
 
 
 * SLSA_SONAR_TOKEN with value from [SonarQube token above](#bookmark=id.kodyke6fbq9)
 
-    ```
+```
 printf "YOUR TOKEN" | gcloud secrets create SLSA_SONAR_TOKEN --data-file=-
 ```
 
@@ -173,7 +173,7 @@ gcloud beta builds triggers create cloud-source-repositories \
 
 * Create the release Cloud Build Trigger
 
-    ```
+```
 gcloud alpha builds triggers create pubsub \
   --name="slsa-demo-ga-release" \
   --repo=slsa-demo-ga \
@@ -192,7 +192,7 @@ gcloud alpha builds triggers create pubsub \
 
 * Run the command at the git repository root to create the Cloud Deploy pipeline, replace the project and region
 
-    ```
+```
 gcloud deploy apply --file=cloud-deploy/clouddeploy.yaml --region=asia-east1 --project=YOUR_PROJECT
 ```
 
