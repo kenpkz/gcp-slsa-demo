@@ -11,4 +11,4 @@ steps:
     gcloud beta deploy releases create rev-${SHORT_SHA} --delivery-pipeline=slsa-node-example-pipeline --labels=version=${SHORT_SHA} --region ${_KMS_KEY_LOCATION}
 substitutions:
   _IMAGE_PATH: gcr.io/slsa-demo/sample-node
-  _KMS_KEY_LOCATION: global
+  _KMS_KEY_LOCATION: asia-east1
