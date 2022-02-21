@@ -143,13 +143,7 @@ printf "YOUR TOKEN" | gcloud secrets create SLSA_SONAR_TOKEN --data-file=-
 
 
 
-* Replace the branch-pattern (for the simplicity, you can use either ^main$ or ^master$) with the repo you created 
-
-<p id="gdcalert11" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: undefined internal link (link text: "here"). Did you generate a TOC? </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert12">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-[here](#heading=h.vmys2yijn5db) and then run below command
-
-    
+* Replace the branch-pattern (for the simplicity, you can use either ^main$ or ^master$) with the repo you created above and then run below command
 
 
 ```
