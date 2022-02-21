@@ -14,7 +14,7 @@ After the installation, log in SonarQube as the administrator.
 
 * Create a new project and name it “`slsa-demo`”
 
-![alt_text](images/sonarqube.png "image_tooltip")
+![alt_text](https://github.com/kenpkz/gcp-slsa-demo/blob/master/images/sonarqube.png)
 
 
 
