@@ -7,6 +7,7 @@ steps:
   - |
     ImageDigest="$(gcloud container images list-tags --format='get(digest)' ${_IMAGE_PATH} | head -1)"
     echo "Image Digest: ${ImageDigest}"
+    ls
     sed -i '' 's/replace/${ImageDigest}/g' k8s-slsa-pod.yaml
     sed -i '' 's/SHORT_SHA/${SHORT_SHA}/g' k8s-slsa-pod.yaml
     gcloud beta deploy releases create rev-${SHORT_SHA} --delivery-pipeline=slsa-node-example-pipeline --labels=version=${SHORT_SHA} --region ${_KMS_KEY_LOCATION}
