@@ -5,4 +5,4 @@ metadata:
 spec:
   containers:
   - name: slsa-node-example
-    image: gcr.io/slsa-demo/sample-node:${SHORT_SHA}:replace
+    image: gcr.io/slsa-demo/sample-node:SHORT_SHA:replace
