@@ -6,4 +6,4 @@ spec:
   containers:
   - name: slsa-node-example
     image: gcr.io/slsa-demo/sample-node
-    digest: replace
+#    digest: replace
