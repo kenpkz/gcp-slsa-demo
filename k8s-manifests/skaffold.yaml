@@ -1,0 +1,27 @@
+apiVersion: skaffold/v2beta16
+kind: Config
+metadata:
+  name: slsa-node-sample
+build:
+  artifacts:
+  - image: gcr.io/slsa-demo/sample-node
+#  local: {}
+  googleCloudBuild:
+    projectId: slsa-demo
+    timeout: 1200s
+deploy:
+  kustomize:
+    paths:
+    - k8s-manifests/overlays/test
+  kubeContext: gke_slsa-demo_asia-east1-a_slsa
+profiles:
+- name: uat-1
+  deploy:
+    kustomize:
+      paths:
+      - k8s-manifests/overlays/uat
+- name: prod-1
+  deploy:
+    kustomize:
+      paths:
+      - k8s-manifests/overlays/production

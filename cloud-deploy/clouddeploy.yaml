@@ -1,0 +1,29 @@
+apiVersion: deploy.cloud.google.com/v1beta1
+kind: DeliveryPipeline
+metadata:
+ name: slsa-node-example-pipeline
+description: Cloud Deploy Pipeline
+serialPipeline:
+ stages:
+ - targetId: slsa-cluster-no-asm
+   profiles: []
+ - targetId: slsa-cluster-asm
+   profiles: []
+---
+
+apiVersion: deploy.cloud.google.com/v1beta1
+kind: Target
+metadata:
+ name: slsa-cluster-no-asm
+description: development cluster
+gke:
+ cluster: projects/slsa-demo/locations/asia-east1/clusters/slsa-no-asm
+---
+
+apiVersion: deploy.cloud.google.com/v1beta1
+kind: Target
+metadata:
+ name: slsa-cluster-asm
+description: production cluster
+gke:
+ cluster: projects/slsa-demo/locations/asia-east1-a/clusters/slsa

@@ -7,9 +7,8 @@ steps:
   - |
     ImageDigest="$(gcloud container images list-tags --format='get(digest)' ${_IMAGE_PATH} | head -1)"
     echo "Image Digest: ${ImageDigest}"
-    sed -i "s/replace/${ImageDigest}/g" k8s-manifests/overlays/uat/kustomization.yaml
-    sed -i "s/replace/${ImageDigest}/g" k8s-manifests/overlays/production/kustomization.yaml
-    gcloud beta deploy releases create rev-${SHORT_SHA} --delivery-pipeline=sample-node-demo-1 --labels=version=${SHORT_SHA} --region ${_KMS_KEY_LOCATION}
+    sed -i "s/replace/${ImageDigest}/g" cloud-deploy/k8s-slsa-pod.yaml
+    gcloud beta deploy releases create rev-${SHORT_SHA} --delivery-pipeline=slsa-node-example-pipeline --labels=version=${SHORT_SHA} --region ${_KMS_KEY_LOCATION}
 substitutions:
-  _IMAGE_PATH: asia-east1-docker.pkg.dev/slsa-demo/slsa-demo/sample-node
-  _KMS_KEY_LOCATION: asia-east1
+  _IMAGE_PATH: gcr.io/slsa-demo/sample-node
+  _KMS_KEY_LOCATION: global

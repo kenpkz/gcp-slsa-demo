@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: slsa-node-example
+spec:
+  containers:
+  - name: slsa-node-example
+    image: gcr.io/slsa-demo/sample-node
+    digest: replace
